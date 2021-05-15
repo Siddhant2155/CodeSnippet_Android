@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">IntentTest</string>
+    <string name="button">Set Alarm Intent</string>
+    <string name="button2">Open Email Intent</string>
+</resources>
