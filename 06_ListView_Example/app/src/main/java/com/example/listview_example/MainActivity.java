@@ -86,19 +86,30 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            View viewItem = getLayoutInflater().inflate(
-                    R.layout.list_of_courses,
-                    parent,
-                    false
-            );
+//            View viewItem = getLayoutInflater().inflate(
+//                    R.layout.list_of_courses,
+//                    parent,
+//                    false
+//            );
+//
+//            TextView name = viewItem.findViewById(R.id.name);
+//            TextView course = viewItem.findViewById(R.id.course);
 
-            TextView name = viewItem.findViewById(R.id.name);
-            TextView course = viewItem.findViewById(R.id.course);
+            // Performance Optimization
+            if(convertView == null) {
+                convertView = getLayoutInflater().inflate(
+                        R.layout.list_of_courses,
+                        parent,
+                        false
+                );
+            }
+            TextView name = convertView.findViewById(R.id.name);
+            TextView course = convertView.findViewById(R.id.course);
 
             name.setText(getItem(position).getName());
             course.setText(getItem(position).getCourse());
 
-            return  viewItem;
+            return  convertView;
         }
     }
 }
