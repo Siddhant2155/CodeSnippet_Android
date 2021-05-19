@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TimerApp</string>
+    <string name="mm">MM</string>
+    <string name="ss">SS</string>
+    <string name="add">Add</string>
+    <string name="time_up">Time UP!!</string>
+    <string name="pause">Pause</string>
+</resources>
