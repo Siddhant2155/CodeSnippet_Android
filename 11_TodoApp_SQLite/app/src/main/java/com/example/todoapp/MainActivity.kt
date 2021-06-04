@@ -8,16 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.databinding.DataBindingUtil
+import com.example.todoapp.databinding.ActivityMainBinding
 import com.example.todoapp.db.MyDbHelpe
 import com.example.todoapp.db.TodoTable
 
 class MainActivity : AppCompatActivity() {
 
     var todos = ArrayList<Todo>()
-
+    lateinit var mBinding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+      mBinding=DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         val listAdaptor = ArrayAdapter<Todo>(
             this,
@@ -26,13 +28,15 @@ class MainActivity : AppCompatActivity() {
             todos
         )
 
-        val listView = findViewById<ListView>(R.id.lstView)
-        val btn = findViewById<Button>(R.id.btn)
-        val editText = findViewById<EditText>(R.id.editText)
+     //   val listView = findViewById<ListView>(R.id.lstView)
+       // val btn = findViewById<Button>(R.id.btn)
+        //val editText = findViewById<EditText>(R.id.editText)
+        mBinding.btn.setOnClickListener {
 
-        listView.adapter = listAdaptor
-//        val todoAdaptor = TodoAdaptor(todos, this)
-//        listView.adapter = todoAdaptor
+        }
+//        listView.adapter = listAdaptor
+        val todoAdaptor = TodoAdaptor( this,todos)
+        mBinding.lstView.adapter = todoAdaptor
 
         val db = MyDbHelpe(this).writableDatabase
 
@@ -40,25 +44,25 @@ class MainActivity : AppCompatActivity() {
             todos.clear()
             todos.addAll(TodoTable.getAllTodos(db))
             Log.d("TODOS", todos.toString())
-//            todoAdaptor.notifyDataSetChanged()
-            listAdaptor.notifyDataSetChanged()
+            todoAdaptor.notifyDataSetChanged()
+//            listAdaptor.notifyDataSetChanged()
         }
         refreshTodoList()
 
-        btn.setOnClickListener {
+        mBinding.btn.setOnClickListener {
             val newTodo = Todo(
-                editText.text.toString(),
+                mBinding.editText.text.toString(),
                 false
             )
             TodoTable.insertTodo(db, newTodo)
-            editText.setText("")
+            mBinding.editText.setText("")
 
             refreshTodoList()
 
         }
     }
-    class TodoAdaptor(val todos: ArrayList<Todo>,
-    val context: Context) : BaseAdapter() {
+    class TodoAdaptor(val context: Context,val todos: ArrayList<Todo>,
+                       ) : BaseAdapter() {
         override fun getCount(): Int {
             return  todos.size
         }
@@ -73,10 +77,9 @@ class MainActivity : AppCompatActivity() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-            val view = View.inflate(
-                context,
+            val view = LayoutInflater.from(context).inflate(
                 android.R.layout.simple_list_item_1,
-                parent
+                parent,false
             )
             view.findViewById<TextView>(android.R.id.text1).setText(todos.get(position).task)
 
